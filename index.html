@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JASVORA | Official Store</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- General Reset --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            overflow-x: hidden;
+        }
+
+        /* --- Announcement Bar --- */
+        .announcement-bar {
+            background-color: #000000;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* --- Header --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #eeeeee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        /* PC Layout Specifics */
+        .logo {
+            flex: 1; /* Left align on PC */
+            text-align: left;
+        }
+
+        .logo h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Desktop Navigation Links (Center) */
+        .desktop-nav {
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .desktop-nav a {
+            text-decoration: none;
+            color: #000;
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: color 0.3s ease;
+        }
+
+        .desktop-nav a:hover {
+            color: #777; /* Subtle hover effect */
+        }
+
+        .header-icons {
+            flex: 1; /* Right align on PC */
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+        }
+
+        .header-icons i {
+            font-size: 20px;
+            cursor: pointer;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        .header-icons i:hover {
+            color: #000;
+        }
+
+        .menu-icon {
+            display: none; /* Hidden on PC */
+        }
+
+        /* --- Search Dropdown --- */
+        .search-container {
+            position: absolute;
+            top: 100%; /* Just below header */
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            transform: translateY(-100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 99;
+        }
+
+        .search-container.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .search-container input {
+            width: 60%;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            outline: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+        }
+
+        .search-container button {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        /* --- Sliding Drawers (Menu & Cart) --- */
+        .side-drawer {
+            position: fixed;
+            top: 0;
+            width: 350px;
+            max-width: 80%;
+            height: 100vh;
+            background-color: #fff;
+            z-index: 1000;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            transition: transform 0.4s ease;
+        }
+
+        .left-drawer {
+            left: 0;
+            transform: translateX(-100%);
+        }
+
+        .right-drawer {
+            right: 0;
+            transform: translateX(100%);
+        }
+
+        .side-drawer.active {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .drawer-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            letter-spacing: 1px;
+        }
+
+        .close-btn {
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* Mobile Menu Links inside Drawer */
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mobile-nav-links a {
+            text-decoration: none;
+            color: #000;
+            font-size: 16px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Cart Empty State */
+        .cart-content {
+            text-align: center;
+            margin-top: 50px;
+            color: #777;
+        }
+        
+        .cart-content .btn-checkout {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* --- Overlay Background --- */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* --- Hero Slider --- */
+        .hero-slider {
+            position: relative;
+            width: 100%;
+            height: calc(100vh);
+            overflow: hidden;
+            background-color: #f4f4f4;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            z-index: 1;
+        }
+
+        .slide.active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+
+        /* --- Responsive Design for Mobile --- */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+            .desktop-nav {
+                display: none; /* Hide PC links on mobile */
+            }
+            .menu-icon {
+                display: block; /* Show hamburger */
+                flex: 1;
+            }
+            .logo {
+                flex: 2;
+                text-align: center; /* Center logo on mobile */
+            }
+            .logo h1 { font-size: 24px; }
+            .header-icons {
+                flex: 1;
+            }
+            .search-container input {
+                width: 75%;
+            }
+        }
+
+        /* --- Part 2: Our Collections Section --- */
+        .collections-section {
+            padding: 80px 5%;
+            background-color: #ffffff;
+            text-align: center;
+        }
+
+        .collections-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 400;
+            letter-spacing: 3px;
+            margin-bottom: 50px;
+            color: #000000;
+            text-transform: uppercase;
+        }
+
+        /* Desktop: 4 columns */
+        .collections-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .collection-card {
+            cursor: pointer;
+            text-decoration: none;
+            color: #000000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .collection-img-wrapper {
+            width: 100%;
+            aspect-ratio: 3/4; /* Keeps all images uniformly tall */
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .collection-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease; /* Smooth hover zoom */
+        }
+
+        /* Hover Effect */
+        .collection-card:hover .collection-img-wrapper img {
+            transform: scale(1.08);
+        }
+
+        .collection-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .collection-card:hover h3 {
+            color: #777;
+        }
+
+        /* --- Responsive Design for Collections --- */
+        @media (max-width: 992px) {
+            /* Tablet/Mobile: 2 columns like the reference image */
+            .collections-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .collections-section {
+                padding: 50px 20px;
+            }
+            .collections-section h2 {
+                font-size: 26px;
+                margin-bottom: 30px;
+            }
+            .collections-grid {
+                gap: 15px;
+            }
+            .collection-card h3 {
+                font-size: 13px;
+                letter-spacing: 2px;
+            }
+        }
+
+        /* --- Part 3: Products Section --- */
+        .products-section {
+            padding: 80px 5%;
+            background-color: #ffffff;
+            text-align: center;
+        }
+
+        .products-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 400;
+            letter-spacing: 3px;
+            margin-bottom: 50px;
+            color: #000000;
+            text-transform: uppercase;
+        }
+
+        /* Desktop: 4 columns */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .product-card {
+            text-decoration: none;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .product-img-wrapper {
+            width: 100%;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .product-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        /* Subtle Zoom on Hover */
+        .product-card:hover .product-img-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .product-info h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            color: #111;
+        }
+
+        .product-info p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            color: #555;
+        }
+
+        /* View All Button */
+        .btn-view-all {
+            display: inline-block;
+            margin-top: 50px;
+            padding: 15px 45px;
+            background-color: #111;
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-view-all:hover {
+            background-color: #444;
+        }
+
+        /* --- Responsive Design for Products --- */
+        @media (max-width: 992px) {
+            /* Tablet: 3 columns */
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* Mobile: 2 columns matching reference image */
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            .products-section {
+                padding: 50px 20px;
+            }
+            .products-section h2 {
+                font-size: 24px;
+                margin-bottom: 30px;
+            }
+            .product-info h4 {
+                font-size: 12px;
+                letter-spacing: 1px;
+            }
+            .product-info p {
+                font-size: 13px;
+            }
+            .btn-view-all {
+                width: 100%; /* Full width button on mobile */
+                padding: 15px 0;
+            }
+        }
+        /* --- Part 4: Brand Story & Promo Banner --- */
+        .promo-split-section {
+            display: flex;
+            width: 100%;
+            background-color: #111111; /* Dark premium background */
+            color: #ffffff;
+            margin-top: 50px;
+        }
+
+        .promo-image {
+            flex: 1;
+            /* Placeholder image for aesthetic brand feel */
+            background: url('https://images.unsplash.com/photo-1572804013309-8c995f9fdc18?w=1000&q=80') no-repeat center center/cover;
+            min-height: 500px;
+        }
+
+        .promo-content-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 10%;
+            text-align: left;
+        }
+
+        .promo-content-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 400;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .promo-content-box p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            color: #cccccc;
+        }
+
+        /* Newsletter Input Form */
+        .newsletter-form {
+            display: flex;
+            width: 100%;
+            max-width: 400px;
+            border-bottom: 1px solid #ffffff;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 10px 0;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .newsletter-form input::placeholder {
+            color: #888888;
+            letter-spacing: 1px;
+        }
+
+        .newsletter-form button {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 10px 10px 10px 20px;
+            transition: color 0.3s;
+        }
+
+        .newsletter-form button:hover {
+            color: #D4AF37; /* Accent Gold */
+        }
+
+        /* --- Responsive Design for Promo Section --- */
+        @media (max-width: 992px) {
+            .promo-content-box {
+                padding: 60px 5%;
+            }
+            .promo-content-box h2 {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .promo-split-section {
+                flex-direction: column; /* Stack vertically on mobile */
+            }
+            .promo-image {
+                min-height: 400px;
+            }
+            .promo-content-box {
+                padding: 50px 20px;
+                text-align: center;
+                align-items: center; /* Center everything on mobile */
+            }
+            .newsletter-form {
+                justify-content: center;
+            }
+            .newsletter-form input {
+                text-align: center;
+            }
+        }
+        /* --- Part 4.5: Trust Features & Instagram Feed --- */
+        
+        /* Trust Bar */
+        .trust-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 50px 5%;
+            background-color: #fcfcfc;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .trust-item {
+            text-align: center;
+            color: #111111;
+            flex: 1;
+            padding: 0 20px;
+        }
+
+        .trust-item i {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #000000;
+        }
+
+        .trust-item h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .trust-item p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            color: #666666;
+            line-height: 1.5;
+        }
+
+        /* Instagram Section */
+        .insta-section {
+            padding: 80px 0 0 0;
+            text-align: center;
+            background-color: #ffffff;
+        }
+
+        .insta-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .insta-section p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color: #555555;
+            margin-bottom: 40px;
+        }
+
+        .insta-grid {
+            display: flex;
+            width: 100%;
+        }
+
+        .insta-item {
+            flex: 1;
+            position: relative;
+            aspect-ratio: 1/1; /* Makes images perfect squares */
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .insta-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .insta-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .insta-overlay i {
+            color: #ffffff;
+            font-size: 35px;
+        }
+
+        /* Hover Effects */
+        .insta-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .insta-item:hover .insta-overlay {
+            opacity: 1;
+        }
+
+        /* --- Responsive Design for Part 4.5 --- */
+        @media (max-width: 768px) {
+            .trust-bar {
+                flex-direction: column;
+                gap: 40px;
+            }
+            .insta-grid {
+                flex-wrap: wrap; /* Stack on mobile */
+            }
+            .insta-item {
+                flex: 0 0 50%; /* 2 images per row on mobile */
+            }
+            .insta-section {
+                padding: 60px 0 0 0;
+            }
+        }
+
+        /* --- Part 4.8: Client Diaries (Testimonials) --- */
+        .testimonials-section {
+            padding: 80px 5%;
+            background-color: #f9f9f9; /* Slightly off-white background to separate from Insta feed */
+            text-align: center;
+        }
+
+        .testimonials-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 400;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            color: #000000;
+            text-transform: uppercase;
+        }
+
+        .testimonials-section .subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color: #666666;
+            margin-bottom: 50px;
+            letter-spacing: 1px;
+        }
+
+        .testimonials-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            flex: 1;
+            background-color: #ffffff;
+            padding: 40px 30px;
+            border: 1px solid #eeeeee;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transform: translateY(-5px);
+        }
+
+        .stars {
+            color: #D4AF37; /* Accent Gold for Stars */
+            font-size: 14px;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .review-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            font-style: italic;
+            color: #333333;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .customer-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #000000;
+            text-transform: uppercase;
+        }
+
+        .verified {
+            font-size: 10px;
+            color: #28a745;
+            margin-left: 5px;
+        }
+
+        /* --- Responsive Design for Testimonials --- */
+        @media (max-width: 768px) {
+            .testimonials-grid {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .testimonials-section {
+                padding: 60px 20px;
+            }
+            .testimonial-card {
+                padding: 30px 20px;
+            }
+        }
+
+        /* --- Part 4: Brand Story & Promo Banner --- */
+        .promo-split-section {
+            display: flex;
+            width: 100%;
+            background-color: #111111; 
+            color: #ffffff;
+            margin-top: 50px;
+        }
+
+        .promo-image {
+            flex: 1;
+            display: flex; /* Flex taake image container ko pura fill kare */
+            min-height: 500px;
+        }
+
+        /* Yeh nayi CSS image tag ke liye hai */
+        .promo-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Image stretch nahi hogi, perfectly crop ho jayegi */
+        }
+
+        .promo-content-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 10%;
+            text-align: left;
+        }
+        /* Baqi text aur form ki CSS waise hi rahegi jo pehle di thi */
+    </style>
+</head>
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="announcement-bar">
+        Flat $25 Shipping Worldwide
+    </div>
+
+    <!-- Header Section -->
+    <header>
+        <!-- Mobile Hamburger Icon -->
+        <div class="menu-icon" onclick="openMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        
+        <!-- Logo (Left on PC, Center on Mobile) -->
+        <div class="logo">
+            <h1>JASVORA</h1>
+        </div>
+
+        <!-- Desktop Navigation Links (Center on PC) -->
+        <nav class="desktop-nav">
+            <a href="#">Home</a>
+            <a href="#">Shop</a>
+            <a href="#">Collections</a>
+            <a href="#">About</a>
+        </nav>
+
+        <!-- Icons (Right) -->
+        <div class="header-icons">
+            <i class="fas fa-search" onclick="toggleSearch()"></i>
+            <i class="fas fa-shopping-bag" onclick="openCart()"></i>
+        </div>
+
+        <!-- Search Bar Dropdown -->
+        <div class="search-container" id="searchBar">
+            <input type="text" placeholder="Search for products, categories...">
+            <button>Search</button>
+        </div>
+    </header>
+
+    <!-- Dark Overlay for Menu and Cart -->
+    <div class="overlay" id="bgOverlay" onclick="closeAllDrawers()"></div>
+
+    <!-- Left Sliding Menu (For Mobile) -->
+    <div class="side-drawer left-drawer" id="mobileMenu">
+        <div class="drawer-header">
+            <h3>Menu</h3>
+            <i class="fas fa-times close-btn" onclick="closeAllDrawers()"></i>
+        </div>
+        <div class="mobile-nav-links">
+            <a href="#">Home</a>
+            <a href="#">Shop</a>
+            <a href="#">Collections</a>
+            <a href="#">Summer Sale</a>
+            <a href="#">About JASVORA</a>
+            <a href="#">Contact Us</a>
+        </div>
+    </div>
+
+    <!-- Right Sliding Cart -->
+    <div class="side-drawer right-drawer" id="shoppingCart">
+        <div class="drawer-header">
+            <h3>Your Cart</h3>
+            <i class="fas fa-times close-btn" onclick="closeAllDrawers()"></i>
+        </div>
+        <div class="cart-content">
+            <i class="fas fa-shopping-bag" style="font-size: 40px; color: #ddd; margin-bottom: 15px;"></i>
+            <p>Your cart is currently empty.</p>
+            <a href="#" class="btn-checkout">Continue Shopping</a>
+        </div>
+    </div>
+
+    <!-- Image Slider Section (Same as before) -->
+    <section class="hero-slider">
+        <!-- Banner 1 -->
+        <picture class="slide active">
+            <source media="(max-width: 768px)" srcset="media/mobilebanner1.webp">
+            <img src="media/pcbanner1.webp" alt="Banner 1">
+        </picture>
+        <!-- Banner 2 -->
+        <picture class="slide">
+            <source media="(max-width: 768px)" srcset="media/mobilebanner5.webp">
+            <img src="media/pcbanner5.webp" alt="Banner 2">
+        </picture>
+        <!-- Banner 3 -->
+        <picture class="slide">
+            <source media="(max-width: 768px)" srcset="media/mobilebanner3.webp">
+            <img src="media/pcbanner3.webp" alt="Banner 3">
+        </picture>
+        <!-- Banner 4 -->
+        <picture class="slide">
+            <source media="(max-width: 768px)" srcset="media/mobilebanner4.webp">
+            <img src="media/pcbanner4.webp" alt="Banner 4">
+        </picture>
+        <!-- Banner 5 -->
+        <picture class="slide">
+            <source media="(max-width: 768px)" srcset="media/mobilebanner2.webp">
+            <img src="media/pcbanner2.webp" alt="Banner 5">
+        </picture>
+    </section>
+
+    <!-- Javascript for Interactions and Slider -->
+    <script>
+        // DOM Elements
+        const mobileMenu = document.getElementById('mobileMenu');
+        const shoppingCart = document.getElementById('shoppingCart');
+        const bgOverlay = document.getElementById('bgOverlay');
+        const searchBar = document.getElementById('searchBar');
+
+        // Functions for Sliding Drawers
+        function openMenu() {
+            mobileMenu.classList.add('active');
+            bgOverlay.classList.add('active');
+            searchBar.classList.remove('active'); // Close search if open
+        }
+
+        function openCart() {
+            shoppingCart.classList.add('active');
+            bgOverlay.classList.add('active');
+            searchBar.classList.remove('active'); // Close search if open
+        }
+
+        function closeAllDrawers() {
+            mobileMenu.classList.remove('active');
+            shoppingCart.classList.remove('active');
+            bgOverlay.classList.remove('active');
+        }
+
+        // Function for Search Bar Toggle
+        function toggleSearch() {
+            searchBar.classList.toggle('active');
+            // Close drawers if they are open
+            if(mobileMenu.classList.contains('active') || shoppingCart.classList.contains('active')){
+                closeAllDrawers();
+            }
+        }
+
+        // Image Slider Logic
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        setInterval(nextSlide, 4000); // Change image every 4 seconds
+    </script>
+   <!-- Part 2: Our Collections -->
+    <section class="collections-section">
+        <h2>OUR COLLECTIONS</h2>
+        
+        <div class="collections-grid">
+            <!-- Category 1 -->
+            <a href="#" class="collection-card">
+                <div class="collection-img-wrapper">
+                    <!-- Placeholder image, replace with client's Winter collection pic -->
+                    <img src="media/cat1.webp" alt="Winter Collection">
+                </div>
+                <h3>WINTER</h3>
+            </a>
+            
+            <!-- Category 2 -->
+            <a href="#" class="collection-card">
+                <div class="collection-img-wrapper">
+                    <img src="media/cat2.webp" alt="Summer Collection">
+                </div>
+                <h3>SUMMER</h3>
+            </a>
+
+            <!-- Category 3 -->
+            <a href="#" class="collection-card">
+                <div class="collection-img-wrapper">
+                    <img src="media/cat3.webp" alt="Festive Collection">
+                </div>
+                <h3>FESTIVE</h3>
+            </a>
+
+            <!-- Category 4 -->
+            <a href="#" class="collection-card">
+                <div class="collection-img-wrapper">
+                    <img src="media/cat4.webp" alt="Unstitched Collection">
+                </div>
+                <h3>UNSTITCHED</h3>
+            </a>
+        </div>
+    </section>
+    <!-- Part 3: Featured Products -->
+    <section class="products-section">
+        <h2>NEW ARRIVALS</h2>
+        
+        <div class="products-grid">
+            <!-- Product 1 -->
+            <a href="#" class="product-card">
+                <div class="product-img-wrapper">
+                    <img src="media/product_1.webp" alt="Winter Suit A">
+                </div>
+                <div class="product-info">
+                    <h4>1007 - A | 3 PC WINTER</h4>
+                    <p>Rs.11,995</p>
+                </div>
+            </a>
+            
+            <!-- Product 2 -->
+            <a href="#" class="product-card">
+                <div class="product-img-wrapper">
+                    <img src="media/product_2.webp" alt="Winter Suit B">
+                </div>
+                <div class="product-info">
+                    <h4>1007 - B | 3 PC WINTER</h4>
+                    <p>Rs.11,995</p>
+                </div>
+            </a>
+
+            <!-- Product 3 -->
+            <a href="#" class="product-card">
+                <div class="product-img-wrapper">
+                    <img src="media/product_3.webp" alt="Winter Suit C">
+                </div>
+                <div class="product-info">
+                    <h4>1008 - A | 3 PC WINTER</h4>
+                    <p>Rs.12,495</p>
+                </div>
+            </a>
+
+            <!-- Product 4 -->
+            <a href="#" class="product-card">
+                <div class="product-img-wrapper">
+                    <img src="media/product_4.webp" alt="Winter Suit D">
+                </div>
+                <div class="product-info">
+                    <h4>1008 - B | 3 PC WINTER</h4>
+                    <p>Rs.12,495</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- View All Button -->
+        <a href="#" class="btn-view-all">VIEW ALL</a>
+    </section>
+    <!-- Part 4: Brand Story & Promo -->
+
+    <section class="promo-split-section">
+        
+
+       
+            <img src="media/about.webp" alt="The Jasvora Experience">
+        
+        
+        <!-- Right Side: Content & Newsletter -->
+        <div class="promo-content-box">
+            <h2>The Jasvora Experience</h2>
+            <p>Crafted for the modern woman who embraces her roots. Our designs blend traditional craftsmanship with contemporary elegance. Join our insider club and be the first to know about new collections, exclusive sales, and get <strong>15% OFF</strong> your first order.</p>
+            
+            <form class="newsletter-form" action="#" method="POST">
+                <input type="email" placeholder="Enter your email address" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+
+    </section>
+<!-- Part 4.5: Trust Features -->
+    <section class="trust-bar">
+        <div class="trust-item">
+            <i class="fas fa-shipping-fast"></i>
+            <h4>Fast Shipping</h4>
+            <p>Delivery across Pakistan & Worldwide via reliable couriers.</p>
+        </div>
+        <div class="trust-item">
+            <i class="fas fa-medal"></i>
+            <h4>Premium Quality</h4>
+            <p>100% authentic fabric and impeccable craftsmanship.</p>
+        </div>
+        <div class="trust-item">
+            <i class="fas fa-headset"></i>
+            <h4>24/7 Support</h4>
+            <p>Our customer care team is always here to help you.</p>
+        </div>
+    </section>
+
+    <!-- Part 4.5: Instagram Feed -->
+    <section class="insta-section">
+        <h2>@JASVORA_ONLINE</h2>
+        <p>Follow us on Instagram for daily style inspiration.</p>
+        
+        <div class="insta-grid">
+            <!-- Insta Post 1 -->
+            <a href="#" class="insta-item">
+                <img src="media/insta1.webp" alt="Instagram Post 1">
+                <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+            </a>
+            
+            <!-- Insta Post 2 -->
+            <a href="#" class="insta-item">
+                <img src="media/insta2.webp" alt="Instagram Post 2">
+                <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+            </a>
+            
+            <!-- Insta Post 3 -->
+            <a href="#" class="insta-item">
+                <img src="media/insta3.webp" alt="Instagram Post 3">
+                <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+            </a>
+            
+            <!-- Insta Post 4 -->
+            <a href="#" class="insta-item">
+                <img src="media/insta4.webp" alt="Instagram Post 4">
+                <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+            </a>
+        </div>
+    </section>
+    <!-- Part 4.8: Client Diaries (Reviews) -->
+    <section class="testimonials-section">
+        <h2>CLIENT DIARIES</h2>
+        <p class="subtitle">Loved by women across the globe</p>
+        
+        <div class="testimonials-grid">
+            
+            <!-- Review 1 -->
+            <div class="testimonial-card">
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="review-text">"The embroidery details on the winter collection are just breathtaking. The fabric feels so premium. Highly recommended!"</p>
+                <p class="customer-name">Sana M. <i class="fas fa-check-circle verified" title="Verified Buyer"></i></p>
+            </div>
+            
+            <!-- Review 2 -->
+            <div class="testimonial-card">
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="review-text">"I wore the festive collection outfit to a wedding and received countless compliments. The fit and finish are absolutely perfect."</p>
+                <p class="customer-name">Fatima A. <i class="fas fa-check-circle verified" title="Verified Buyer"></i></p>
+            </div>
+
+            <!-- Review 3 -->
+            <div class="testimonial-card">
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="review-text">"Very fast shipping to the UK. The unstitched fabric is exactly as shown in the pictures. Will definitely shop again from Jasvora."</p>
+                <p class="customer-name">Zara K. <i class="fas fa-check-circle verified" title="Verified Buyer"></i></p>
+            </div>
+
+        </div>
+    </section>
+    <style>
+        /* --- Part 5: Footer Section --- */
+        .footer-section {
+            background-color: #111111;
+            color: #ffffff;
+            padding: 80px 5% 20px 5%;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-col h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            display: inline-block;
+            color: #ffffff;
+        }
+
+        .footer-col p {
+            font-size: 13px;
+            color: #aaaaaa;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 15px;
+        }
+
+        .footer-col ul li a {
+            text-decoration: none;
+            color: #aaaaaa;
+            font-size: 13px;
+            transition: color 0.3s ease, padding-left 0.3s ease;
+        }
+
+        .footer-col ul li a:hover {
+            color: #D4AF37; /* Accent Gold */
+            padding-left: 5px; /* Slight slide effect on hover */
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            color: #ffffff;
+            background-color: #222222;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .social-icons a:hover {
+            background-color: #D4AF37;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333333;
+            padding-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .copyright {
+            font-size: 12px;
+            color: #888888;
+            letter-spacing: 1px;
+        }
+
+        .payment-icons {
+            display: flex;
+            gap: 15px;
+            font-size: 24px;
+            color: #666666;
+        }
+
+        /* --- Responsive Design for Footer --- */
+        @media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr; /* 2 columns on tablet */
+            }
+        }
+
+        @media (max-width: 576px) {
+            .footer-section {
+                padding: 60px 20px 20px 20px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr; /* 1 column on mobile */
+                text-align: center;
+                gap: 40px;
+            }
+            .social-icons {
+                justify-content: center;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+    <!-- Part 5: Footer -->
+    <footer class="footer-section">
+        <div class="footer-grid">
+            
+            <!-- Brand Info & Socials -->
+            <div class="footer-col">
+                <div class="footer-logo">JASVORA</div>
+                <p>Redefining elegance for the modern woman. Jasvora offers a curated collection of premium unstitched and ready-to-wear ensembles, blending traditional craftsmanship with contemporary designs.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <ul>
+                    <li><a href="#">New Arrivals</a></li>
+                    <li><a href="#">Winter Collection</a></li>
+                    <li><a href="#">Festive Wear</a></li>
+                    <li><a href="#">Unstitched Fabrics</a></li>
+                    <li><a href="#">About Jasvora</a></li>
+                </ul>
+            </div>
+
+            <!-- Customer Care -->
+            <div class="footer-col">
+                <h3>Customer Care</h3>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Shipping & Delivery</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">Track Your Order</a></li>
+                    <li><a href="#">Size Guide</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="footer-col">
+                <h3>Get In Touch</h3>
+                <p><strong>Email:</strong> care@jasvora.com</p>
+                <p><strong>Phone:</strong> +92 300 0000000</p>
+                <p><strong>Hours:</strong> Mon - Sat, 9:00 AM - 6:00 PM</p>
+            </div>
+            
+        </div>
+
+        <!-- Copyright & Payments -->
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2026 JASVORA. All Rights Reserved.
+            </div>
+            <div class="payment-icons">
+                <i class="fab fa-cc-visa"></i>
+                <i class="fab fa-cc-mastercard"></i>
+                <i class="fab fa-cc-paypal"></i>
+                <i class="fab fa-cc-apple-pay"></i>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
